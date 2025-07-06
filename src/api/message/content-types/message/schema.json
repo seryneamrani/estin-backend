@@ -11,15 +11,13 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "role": {
-      "type": "enumeration",
-      "enum": [
-        "user",
-        "assisstant"
-      ]
+    "Prompt": {
+      "type": "text",
+      "required": true
     },
-    "text": {
-      "type": "text"
+    "Reponse": {
+      "type": "text",
+      "required": true
     }
   }
 }
