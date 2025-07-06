@@ -23,7 +23,7 @@ export default {
         },
         {
             method: "POST",
-            path: "conversation/:id",
+            path: "/conversation/:id",
             handler: "conversation.ask",
             config: { auth: false }
         }

@@ -11,7 +11,18 @@ export default factories.createCoreService('api::conversation.conversation', ({ 
         });
         return {
             id: conversation.documentId,  // Strapi's auto-generated ID
-            title: conversation.title
+            title: conversation.Title
         };
+    },
+    async getModelResponse(prompt) {
+        try {
+            return (await (await fetch('http://localhost:7360/predict', {
+                method: 'POST',
+                body: prompt
+            })).json()) || null;
+        } catch (error) {
+            strapi.log.error('Model request failed:', error);
+            throw new Error('AI model service unavailable');
+        }
     }
 }));
