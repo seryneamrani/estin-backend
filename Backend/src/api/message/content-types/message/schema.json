@@ -4,20 +4,31 @@
   "info": {
     "singularName": "message",
     "pluralName": "messages",
-    "displayName": "message"
+    "displayName": "Message"
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
-  "pluginOptions": {},
   "attributes": {
-    "Prompt": {
+    "role": {
+      "type": "enumeration",
+      "enum": ["user", "assistant"],
+      "required": true
+    },
+    "content": {
       "type": "text",
       "required": true
     },
-    "Reponse": {
-      "type": "text",
-      "required": true
+    "timestamp": {
+      "type": "datetime",
+      "default": null
+    },
+    "conversation": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::conversation.conversation",
+      "inversedBy": "messages"
     }
   }
 }
+

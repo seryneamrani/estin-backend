@@ -40,7 +40,16 @@ with open(os.path.join(MODEL_DIR, "context_facts.json"), encoding="utf-8") as f:
 # 🤖 Fonction principale
 def generate_estin_response(prompt):
     topics = detect_topic(prompt)
-    facts = "\n".join([context_facts[t] for t in topics])
+
+    # 🔍 Récupère les faits disponibles uniquement
+    facts_list = []
+    for t in topics:
+        if t in context_facts:
+            facts_list.append(context_facts[t])
+        else:
+            print(f"⚠️ Topic '{t}' non trouvé dans context_facts")
+
+    facts = "\n".join(facts_list) if facts_list else "Aucun fait disponible sur ce sujet."
 
     full_prompt = f"""### Instruction:
 Tu es un assistant expert de l'ESTIN (École Supérieure en Sciences et Technologies de l'Informatique et du Numérique) à Amizour, Béjaïa.
@@ -54,5 +63,9 @@ Question : {prompt.strip()}
     inputs = tokenizer(full_prompt, return_tensors="pt").to(device)
     outputs = model.generate(**inputs, max_new_tokens=300, temperature=0.7)
     response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+    if "💬 Réponse :" not in response:
+        print("⚠️ Aucune réponse générée correctement")
+        return "Désolé, je n'ai pas pu générer de réponse claire à votre question."
 
     return response.split("💬 Réponse :")[-1].strip()
